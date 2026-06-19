@@ -1,0 +1,87 @@
+public class Main {
+    public static void main(String[] args) {
+        // ---- Часть 1 и 2: массив товаров ----
+        Product[] products = new Product[5];
+        products[0] = new Product("Самсунг С25 Ультра", "1 февраля 2025", "Samsung Corp.", "Korea", 5599.0, true);
+        products[1] = new Product("iPhone 16 Pro", "15 марта 2025", "Apple Inc.", "USA", 7999.0, false);
+        products[2] = new Product("Ноутбук Acer Swift", "10 января 2025", "Acer", "China", 4500.0, true);
+        products[3] = new Product("Планшет Huawei", "20 декабря 2024", "Huawei", "China", 3200.0, false);
+        products[4] = new Product("Наушники Sony WH-1000XM5", "5 февраля 2025", "Sony", "Japan", 1200.0, true);
+
+        System.out.println("=== Информация о товарах ===");
+        for (Product p : products) {   // улучшенный цикл for-each
+            p.displayInfo();
+        }
+
+        // ---- Часть 3: парк и аттракционы ----
+        Park myPark = new Park("Центральный парк");
+        Park.Attraction rollerCoaster = myPark.new Attraction("Американские горки", "10:00", "21:00", 500.0);
+        Park.Attraction ferrisWheel = myPark.new Attraction("Колесо обозрения", "09:00", "23:00", 300.0);
+        Park.Attraction carousel = myPark.new Attraction("Карусель", "10:30", "20:30", 200.0);
+
+        System.out.println("=== Информация об аттракционах ===");
+        rollerCoaster.displayInfo();
+        ferrisWheel.displayInfo();
+        carousel.displayInfo();
+    }
+}
+
+class Product {
+    private String name;
+    private String productionDate;
+    private String manufacturer;
+    private String country;
+    private double price;
+    private boolean isReserved;
+
+    public Product(String name, String productionDate, String manufacturer,
+                   String country, double price, boolean isReserved) {
+        this.name = name;
+        this.productionDate = productionDate;
+        this.manufacturer = manufacturer;
+        this.country = country;
+        this.price = price;
+        this.isReserved = isReserved;
+    }
+
+    public void displayInfo() {
+        System.out.println("Название: " + name);
+        System.out.println("Дата производства: " + productionDate);
+        System.out.println("Производитель: " + manufacturer);
+        System.out.println("Страна: " + country);
+        System.out.println("Цена: " + price + " руб.");
+        System.out.println("Зарезервирован: " + (isReserved ? "Да" : "Нет"));
+        System.out.println("********************************");
+    }
+}
+
+// Класс Парк с внутренним классом Аттракцион
+class Park {
+    private String parkName;
+
+    public Park(String parkName) {
+        this.parkName = parkName;
+    }
+
+    public class Attraction {
+        private String name;
+        private String openingTime;
+        private String closingTime;
+        private double price;
+
+        public Attraction(String name, String openingTime, String closingTime, double price) {
+            this.name = name;
+            this.openingTime = openingTime;
+            this.closingTime = closingTime;
+            this.price = price;
+        }
+
+        public void displayInfo() {
+            System.out.println("Парк: " + parkName);
+            System.out.println("Аттракцион: " + name);
+            System.out.println("Время работы: с " + openingTime + " до " + closingTime);
+            System.out.println("Цена билета: " + price + " руб.");
+            System.out.println("********************************");
+        }
+    }
+}
