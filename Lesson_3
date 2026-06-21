@@ -1,3 +1,4 @@
+// ЗАДАНИЕ 1
 // Абстрактный класс Животное
 abstract class Animal {
     protected String name;
@@ -130,7 +131,7 @@ class Bowl {
     }
 }
 
-
+// ЗАДАНИЕ 2
 //Интерфейс для геометрических фигур
 interface Shape {
     double getPerimeter();
