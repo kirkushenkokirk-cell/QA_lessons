@@ -1,0 +1,253 @@
+// Абстрактный класс Животное
+abstract class Animal {
+    protected String name;
+    protected static int animalCount = 0; // счётчик всех животных
+
+    public Animal(String name) {
+        this.name = name;
+        animalCount++;
+    }
+
+    // абстрактные методы – потомки
+    public abstract void run(int distance);
+    public abstract void swim(int distance);
+
+    public static int getAnimalCount() {
+        return animalCount;
+    }
+}
+
+//Класс Собака
+class Dog extends Animal {
+    private static int dogCount = 0;
+    private static final int MAX_RUN_DISTANCE = 500;
+    private static final int MAX_SWIM_DISTANCE = 10;
+
+    public Dog(String name) {
+        super(name);
+        dogCount++;
+    }
+
+    @Override
+    public void run(int distance) {
+        if (distance <= MAX_RUN_DISTANCE) {
+            System.out.println(name + " пробежал " + distance + " метров.");
+        } else {
+            System.out.println(name + " не может пробежать " + distance + " метров (максимум " + MAX_RUN_DISTANCE + ").");
+        }
+    }
+
+    @Override
+    public void swim(int distance) {
+        if (distance <= MAX_SWIM_DISTANCE) {
+            System.out.println(name + " проплыл " + distance + " метров.");
+        } else {
+            System.out.println(name + " не может проплыть " + distance + " метров (максимум " + MAX_SWIM_DISTANCE + ").");
+        }
+    }
+
+    public static int getDogCount() {
+        return dogCount;
+    }
+}
+
+// Класс Кот
+class Cat extends Animal {
+    private static int catCount = 0;
+    private static final int MAX_RUN_DISTANCE = 200;
+    // Кот не умеет плавать – при вызове swim выведем сообщение
+    private boolean isFull; // сытость (true – сыт)
+
+    public Cat(String name) {
+        super(name);
+        catCount++;
+        this.isFull = false; // при создании голоден
+    }
+
+    @Override
+    public void run(int distance) {
+        if (distance <= MAX_RUN_DISTANCE) {
+            System.out.println(name + " пробежал " + distance + " метров.");
+        } else {
+            System.out.println(name + " не может пробежать " + distance + " метров (максимум " + MAX_RUN_DISTANCE + ").");
+        }
+    }
+
+    @Override
+    public void swim(int distance) {
+        System.out.println(name + " не умеет плавать.");
+    }
+
+    // Метод для кормления кота из миски
+    public void eatFromBowl(Bowl bowl, int foodNeeded) {
+        if (isFull) {
+            System.out.println(name + " уже сыт.");
+            return;
+        }
+        if (bowl.getFoodAmount() >= foodNeeded) {
+            bowl.decreaseFood(foodNeeded);
+            isFull = true;
+            System.out.println(name + " поел и теперь сыт.");
+        } else {
+            System.out.println(name + " не стал есть, так как в миске недостаточно еды.");
+        }
+    }
+
+    public boolean isFull() {
+        return isFull;
+    }
+
+    public static int getCatCount() {
+        return catCount;
+    }
+}
+
+// Класс Миска
+class Bowl {
+    private int foodAmount; // количество еды в миске
+
+    public Bowl(int initialFood) {
+        this.foodAmount = initialFood;
+    }
+
+    public void addFood(int amount) {
+        if (amount > 0) {
+            foodAmount += amount;
+            System.out.println("В миску добавлено " + amount + " кусочков. Теперь в миске " + foodAmount + " кусочков.");
+        }
+    }
+
+    public int getFoodAmount() {
+        return foodAmount;
+    }
+
+    public void decreaseFood(int amount) {
+        if (amount > 0 && foodAmount >= amount) {
+            foodAmount -= amount;
+        } else {
+            System.out.println("Ошибка: недостаточно еды для уменьшения.");
+        }
+    }
+}
+
+
+//Интерфейс для геометрических фигур
+interface Shape {
+    double getPerimeter();
+    double getArea();
+    String getFillColor();
+    String getBorderColor();
+}
+
+// Абстрактный класс для общих полей (цвета)
+abstract class AbstractShape implements Shape {
+    protected String fillColor;
+    protected String borderColor;
+
+    public AbstractShape(String fillColor, String borderColor) {
+        this.fillColor = fillColor;
+        this.borderColor = borderColor;
+    }
+
+    @Override
+    public String getFillColor() {
+        return fillColor;
+    }
+
+    @Override
+    public String getBorderColor() {
+        return borderColor;
+    }
+}
+
+// ======== Круг ========
+class Circle extends AbstractShape {
+    private double radius;
+
+    public Circle(double radius, String fillColor, String borderColor) {
+        super(fillColor, borderColor);
+        this.radius = radius;
+    }
+
+    @Override
+    public double getPerimeter() {
+        return 2 * Math.PI * radius;
+    }
+
+    @Override
+    public double getArea() {
+        return Math.PI * radius * radius;
+    }
+}
+
+// ======== Прямоугольник ========
+class Rectangle extends AbstractShape {
+    private double width;
+    private double height;
+
+    public Rectangle(double width, double height, String fillColor, String borderColor) {
+        super(fillColor, borderColor);
+        this.width = width;
+        this.height = height;
+    }
+
+    @Override
+    public double getPerimeter() {
+        return 2 * (width + height);
+    }
+
+    @Override
+    public double getArea() {
+        return width * height;
+    }
+}
+
+// ======== Треугольник (произвольный по трём сторонам) ========
+class Triangle extends AbstractShape {
+    private double sideA;
+    private double sideB;
+    private double sideC;
+
+    public Triangle(double sideA, double sideB, double sideC, String fillColor, String borderColor) {
+        super(fillColor, borderColor);
+        this.sideA = sideA;
+        this.sideB = sideB;
+        this.sideC = sideC;
+    }
+
+    @Override
+    public double getPerimeter() {
+        return sideA + sideB + sideC;
+    }
+
+    @Override
+    public double getArea() {
+        // Формула Герона
+        double p = getPerimeter() / 2;
+        return Math.sqrt(p * (p - sideA) * (p - sideB) * (p - sideC));
+    }
+}
+
+// Главный класс для запуска
+public class MainTask2 {
+    public static void main(String[] args) {
+        // Создаём фигуры
+        Shape circle = new Circle(5.0, "Красный", "Черный");
+        Shape rectangle = new Rectangle(4.0, 6.0, "Синий", "Зеленый");
+        Shape triangle = new Triangle(3.0, 4.0, 5.0, "Желтый", "Оранжевый");
+
+        // Выводим информацию
+        printShapeInfo(circle);
+        printShapeInfo(rectangle);
+        printShapeInfo(triangle);
+    }
+
+    private static void printShapeInfo(Shape shape) {
+        System.out.println("Фигура: " + shape.getClass().getSimpleName());
+        System.out.println("Периметр: " + shape.getPerimeter());
+        System.out.println("Площадь: " + shape.getArea());
+        System.out.println("Цвет заливки: " + shape.getFillColor());
+        System.out.println("Цвет границы: " + shape.getBorderColor());
+        System.out.println("----------------------------");
+    }
+}
